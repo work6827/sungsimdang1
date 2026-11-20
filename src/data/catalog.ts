@@ -1,0 +1,17 @@
+export type Product={id:string;name:string;ko:string;category:'Signature'|'Bread'|'Cake';stock:number[];demand:number;art:string;limited:boolean;description:string};
+export const stores=[{id:0,name:'Main Store',ko:'본점',area:'The original city-center stop',factor:1},{id:1,name:'DCC Store',ko:'DCC점',area:'A bakery stop near the convention district',factor:.85},{id:2,name:'Lotte Department Store',ko:'롯데백화점 대전점',area:'A department-store bakery visit',factor:.9}];
+export const visitors=[{id:'alex',name:'Alex',type:'International visitor',initials:'AL',phone:'••• 0101',code:'111111'},{id:'mina',name:'Mina',type:'Daejeon regular',initials:'MK',phone:'••• 0202',code:'222222'},{id:'joon',name:'Joon',type:'Weekend bread traveler',initials:'JP',phone:'••• 0303',code:'333333'}];
+export const products:Product[]=[
+{id:'soboro',name:'Twigim Soboro',ko:'튀김소보로',category:'Signature',stock:[150,110,85],demand:7,art:'soboro',limited:false,description:'A signature fried soboro bun. A little crunch, a little sweetness, and a classic Daejeon memory.'},
+{id:'chive',name:'Pantalong Chive Bread',ko:'판타롱부추빵',category:'Signature',stock:[95,70,60],demand:6,art:'chive',limited:false,description:'A savory bakery favorite for your bread-filled itinerary.'},
+{id:'strawberry',name:'Strawberry Siru Cake',ko:'딸기시루',category:'Cake',stock:[35,24,18],demand:4,art:'cake',limited:true,description:'A strawberry celebration. Seasonal availability and store assortment are simulated in this prototype.'},
+{id:'sweet-potato',name:'Sweet Potato Soboro',ko:'튀소구마',category:'Signature',stock:[100,75,65],demand:6,art:'soboro',limited:false,description:'A sweet-potato variation for the curious bakery traveler.'},
+{id:'salt',name:'Salt Butter Bread',ko:'소금빵',category:'Bread',stock:[80,65,45],demand:5,art:'roll',limited:false,description:'A simple, savory sample selection. Actual assortment requires confirmation with the bakery.'},
+{id:'bome',name:'Bome Mountain',ko:'보문산메아리',category:'Signature',stock:[45,30,25],demand:3,art:'swirl',limited:true,description:'A layered bakery favorite named for Daejeon’s Bomunsan.'},
+{id:'walnut',name:'Walnut Bread',ko:'호두식빵',category:'Bread',stock:[50,42,32],demand:3,art:'loaf',limited:false,description:'A comforting sample loaf for a leisurely breakfast. Catalog entry is illustrative.'},
+{id:'croissant',name:'Chocolate Croissant',ko:'초코크루아상',category:'Bread',stock:[60,48,40],demand:4,art:'roll',limited:false,description:'A chocolate-filled sample pastry. Catalog entry is illustrative.'},
+{id:'mango',name:'Mango Siru Cake',ko:'망고시루',category:'Cake',stock:[24,20,12],demand:3,art:'mango',limited:true,description:'A sunshine-colored seasonal cake example. No current stock or season is implied.'},
+{id:'bean',name:'Red Bean Bun',ko:'단팥빵',category:'Bread',stock:[100,80,60],demand:5,art:'soboro',limited:false,description:'A familiar red-bean bakery classic included in the sample assortment.'},
+{id:'milk',name:'Pure Milk Roll',ko:'순수롤',category:'Cake',stock:[38,28,22],demand:3,art:'swirl',limited:false,description:'A soft roll cake inspired by the bakery’s signature milk-and-cream pairing.'},
+{id:'madeleine',name:'Pure Madeleine',ko:'순수마들렌',category:'Bread',stock:[45,35,25],demand:4,art:'loaf',limited:true,description:'A small sweet treat for the journey. Bread Pass eligibility is a demo rule, not bakery policy.'}];
+export const product=(id:string)=>products.find(p=>p.id===id)!;

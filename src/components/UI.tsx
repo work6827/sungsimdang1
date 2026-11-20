@@ -1,0 +1,4 @@
+import {ReactNode,useEffect,useRef} from 'react';import {X}from'lucide-react';
+export function Art({kind,className=''}:{kind:string;className?:string}){return <img className={`bread-art ${className}`} src={`/assets/${kind}.svg`} alt={`Illustrated ${kind==='cake'?'strawberry cake':'bakery product'} placeholder`}/>}
+export function PageTitle({eyebrow,title,children}:{eyebrow:string;title:string;children?:ReactNode}){return <div className="page-heading"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1>{children&&<p>{children}</p>}</div>}
+export function Modal({title,children,close}:{title:string;children:ReactNode;close:()=>void}){const ref=useRef<HTMLDialogElement>(null);useEffect(()=>{ref.current?.showModal();},[]);return <dialog ref={ref} onCancel={close} className="modal"><button className="icon-button modal-close" aria-label="Close dialog" onClick={close}><X size={20}/></button><h2>{title}</h2>{children}</dialog>}
