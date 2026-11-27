@@ -17,5 +17,7 @@ export function forecast(p:Product,store:number,at:number,scenario:Scenario,stat
 }
 export function kstDate(t:number){return new Date(t+9*3600000).toISOString().slice(0,10)}
 export function atKst(date:string,hour:string){return Date.parse(`${date}T${hour}:00+09:00`)}
-export function formatTime(t:number){return new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(t)}
-export function sellOutLabel(t:number|null){return t===null?'Beyond 3-day simulation':`${formatTime(t)} KST`}
+export function formatTime(t:number,lang:'en'|'ko'='en'){return new Intl.DateTimeFormat(lang==='ko'?'ko-KR':'en-GB',{timeZone:'Asia/Seoul',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(t)}
+/** Clock time only (HH:MM, KST). */
+export function formatClock(t:number){return new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(t)}
+export function sellOutLabel(t:number|null,lang:'en'|'ko'='en'){return t===null?(lang==='ko'?'3일 시뮬레이션 이후':'Beyond 3-day simulation'):`${formatTime(t,lang)} KST`}

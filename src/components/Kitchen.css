@@ -1,0 +1,39 @@
+/* Kitchen display system (KDS) style production board */
+.kds-plan{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto;gap:18px;align-items:center;margin:18px 0;padding:16px;border:1px solid var(--line);border-radius:16px;background:#fffcf6}
+.kds-plan-main{display:flex;gap:14px;align-items:center;min-width:0}
+.kds-plan-main img{width:84px;height:84px;flex-shrink:0;border-radius:12px;object-fit:cover}
+.kds-plan-main h3{margin:2px 0}
+.kds-plan-main p{margin:2px 0}
+.kds-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px;margin:0}
+.kds-stats dt{font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.kds-stats dd{margin:2px 0 0;font-weight:700;font-variant-numeric:tabular-nums}
+.kds-capacity{grid-column:1/-1}
+.kds-capacity dd{display:flex;align-items:center;gap:10px}
+.kds-meter{display:block;flex:1;height:7px;border-radius:5px;background:#e6ddcf;overflow:hidden}
+.kds-meter>span{display:block;height:100%;background:#A87345;transition:width .3s}
+.kds-meter.is-live{margin:8px 0 2px}
+.kds-meter.is-live>span{background:linear-gradient(90deg,#e08a3c,#ffb45c);animation:kds-glow 1.4s ease-in-out infinite}
+
+.kds-board{display:grid;grid-template-columns:repeat(5,minmax(190px,1fr));gap:10px;overflow-x:auto;padding:4px 2px 12px;scroll-snap-type:x proximity}
+.kds-col{display:flex;flex-direction:column;gap:10px;min-height:180px;padding:10px;border-radius:14px;background:#2a2522;scroll-snap-align:start}
+.kds-col-head{display:flex;align-items:center;gap:7px;padding:2px 2px 6px;border-bottom:1px solid #ffffff1f;color:#f3ece4;font:700 .78rem/1.2 Inter,Arial,sans-serif;letter-spacing:.03em}
+.kds-col-head span{margin-left:auto;min-width:22px;padding:2px 7px;border-radius:99px;background:#ffffff1a;text-align:center;font-variant-numeric:tabular-nums}
+.kds-in-production .kds-col-head{color:#ffb45c}
+.kds-received-by-store .kds-col-head{color:#7ee2a8}
+.kds-ticket{display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:10px;background:#fffcf6;box-shadow:0 2px 0 #0003;animation:kds-in .3s ease-out}
+.kds-in-production .kds-ticket{box-shadow:0 0 0 2px #ffb45c,0 2px 0 #0003}
+.kds-ticket-head{display:flex;justify-content:space-between;gap:6px;font-size:.7rem;color:var(--muted)}
+.kds-ticket-head code{font-weight:700;color:var(--ink)}
+.kds-ticket-body{display:flex;gap:9px;align-items:center}
+.kds-ticket-body img{width:46px;height:46px;flex-shrink:0;border-radius:8px;object-fit:cover}
+.kds-ticket-body b{display:block;font-size:.88rem;line-height:1.25}
+.kds-qty{font:800 1.05rem/1.2 ui-monospace,Menlo,monospace;color:#A87345}
+.kds-ticket-body small{display:block;color:var(--muted);font-size:.74rem}
+.kds-time{display:flex;align-items:center;gap:5px;font-size:.75rem;font-variant-numeric:tabular-nums}
+.kds-time span{margin-left:auto;color:var(--muted)}
+.kds-reason{margin:0;font-size:.72rem;line-height:1.4;color:var(--muted)}
+.kds-ticket button{min-height:36px;font-size:.8rem}
+.kds-empty{margin:auto;color:#ffffff40}
+@keyframes kds-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes kds-glow{50%{filter:brightness(1.25)}}
+@media(max-width:1000px){.kds-plan{grid-template-columns:1fr}}

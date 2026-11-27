@@ -46,3 +46,15 @@ Resized, converted to WebP and cropped in the layout. Share-alike adaptations re
 - `daejeon/forest.webp`: [VaneTrz20](https://commons.wikimedia.org/wiki/File:View_from_the_Jangtaesan.jpg), [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 - `daejeon/history.webp`: [이강철](https://commons.wikimedia.org/wiki/File:%EB%8C%80%EC%A0%84%EA%B7%BC%ED%98%84%EB%8C%80%EC%82%AC%EC%A0%84%EC%8B%9C%EA%B4%80_%EC%A3%BC%EC%B6%9C%EC%9E%85%EA%B5%AC.jpg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+## Bakery workspace photography (staff views)
+
+Used as simulated camera feeds in the Trainee AI glasses page and the Inventory Monitor. Overlays, detections and counts are illustrative; no image recognition runs. Resized, converted to WebP and cropped by the layout. Share-alike adaptations retain their original licenses.
+
+- `training/ingredients.webp`: [pfctdayelise — 1-2-3-4 Cake ingredients](https://commons.wikimedia.org/wiki/File:1-2-3-4_Cake_ingredients.JPG), [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/). Retail packaging is incidental; no endorsement implied.
+- `training/prep-bowls.webp`: [Cynthinee — Sifted flour and whipped egg yolks](https://commons.wikimedia.org/wiki/File:Sifted_flour_and_whipped_egg_yolks.jpg), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- `training/mixer.webp`: [Your Best Digs — Bread machine kneading dough](https://commons.wikimedia.org/wiki/File:Bread_machine_kneading_dough.jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
+- `training/kneading.webp`: [Shixart1985 — Baker woman's hands kneading bread dough](https://commons.wikimedia.org/wiki/File:Baker_woman%27s_hands_kneading_bread_dough.jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
+- `training/proofing.webp`: [Ruth Hartnup — Craisin bread dough](https://commons.wikimedia.org/wiki/File:Craisin_bread_dough.jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
+- `training/frying.webp`: [Waldo Jaquith — Frying Doughnuts](https://commons.wikimedia.org/wiki/File:Frying_Doughnuts_-_Flickr_-_Waldo_Jaquith.jpg), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
+- `shelf-scan.webp`: landscape crop of `bakery-shelves.webp` (Pexels 4371669, Pexels License) so detection boxes stay aligned at every screen size.

@@ -1,2 +1,2 @@
-import React from 'react';import{createRoot}from'react-dom/client';import{HashRouter}from'react-router-dom';import{StateProvider}from'./components/State';import App from './App';import './styles.css';
-createRoot(document.getElementById('root')!).render(<React.StrictMode><HashRouter><StateProvider><App/></StateProvider></HashRouter></React.StrictMode>);
+import React from 'react';import{createRoot}from'react-dom/client';import{HashRouter}from'react-router-dom';import{StateProvider}from'./components/State';import App from './App';import{LangProvider}from'./i18n';import './styles.css';
+createRoot(document.getElementById('root')!).render(<React.StrictMode><HashRouter><LangProvider><StateProvider><App/></StateProvider></LangProvider></HashRouter></React.StrictMode>);
