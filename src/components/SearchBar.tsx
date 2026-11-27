@@ -17,6 +17,7 @@ const pages:[string,string,string,typeof Wheat,string][]=[
  ['/passes','Bread Pass','브레드 패스',Ticket,'bread pass reserve reservation booking pickup qr'],
  ['/passport','My Passport','내 패스포트',Stamp,'passport stamps rewards ledger'],
  ['/explore','Explore Daejeon','대전 여행',Compass,'explore daejeon city travel trip places'],
+ ['/operations?tab=quality','Quality & expiry','품질 및 유통기한',Glasses,'quality expiry expiration date food safety haccp fifo waste 유통기한 품질'],
  ['/trainee','Trainee AI glasses','수습 제빵사 AI 안경',Glasses,'trainee glasses ai chef training recipe dough mix kitchen'],
 ];
 

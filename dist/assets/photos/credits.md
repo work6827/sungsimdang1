@@ -49,11 +49,12 @@ Resized, converted to WebP and cropped in the layout. Share-alike adaptations re
 
 ## Bakery workspace photography (staff views)
 
-Used as simulated camera feeds in the Trainee AI glasses page and the Inventory Monitor. Overlays, detections and counts are illustrative; no image recognition runs. Resized, converted to WebP and cropped by the layout. Share-alike adaptations retain their original licenses.
+Used as simulated camera feeds in the Trainee AI glasses page, the Inventory Monitor and the Quality & Expiry scan (`training/ingredients.webp`). Overlays, detections and counts are illustrative; no image recognition runs. Resized, converted to WebP and cropped by the layout. Share-alike adaptations retain their original licenses.
 
 - `training/ingredients.webp`: [pfctdayelise — 1-2-3-4 Cake ingredients](https://commons.wikimedia.org/wiki/File:1-2-3-4_Cake_ingredients.JPG), [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/). Retail packaging is incidental; no endorsement implied.
 - `training/prep-bowls.webp`: [Cynthinee — Sifted flour and whipped egg yolks](https://commons.wikimedia.org/wiki/File:Sifted_flour_and_whipped_egg_yolks.jpg), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-- `training/mixer.webp`: [Your Best Digs — Bread machine kneading dough](https://commons.wikimedia.org/wiki/File:Bread_machine_kneading_dough.jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
+- `training/kitchen-mixer.webp`: [Infrogmation of New Orleans — MorningCallMetrieJuly08KitchenDough](https://commons.wikimedia.org/wiki/File:MorningCallMetrieJuly08KitchenDough.jpg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Commercial bakery kitchen; used for ingredient locating and mixing.
+- `training/divider.webp`: [Martin Carpenter — Snapshot In Time](https://commons.wikimedia.org/wiki/File:Snapshot_In_Time_(68538465).jpeg), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Professional bakery with dough divider and scale; used for dividing.
 - `training/kneading.webp`: [Shixart1985 — Baker woman's hands kneading bread dough](https://commons.wikimedia.org/wiki/File:Baker_woman%27s_hands_kneading_bread_dough.jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
 - `training/proofing.webp`: [Ruth Hartnup — Craisin bread dough](https://commons.wikimedia.org/wiki/File:Craisin_bread_dough.jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
 - `training/frying.webp`: [Waldo Jaquith — Frying Doughnuts](https://commons.wikimedia.org/wiki/File:Frying_Doughnuts_-_Flickr_-_Waldo_Jaquith.jpg), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).

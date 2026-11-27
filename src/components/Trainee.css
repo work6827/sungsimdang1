@@ -137,3 +137,46 @@
 .trainee-checks label{flex-wrap:nowrap;font-size:.9rem;color:var(--ink);letter-spacing:0}
 .trainee-checks label{display:inline-flex!important;flex:0 1 auto;width:auto!important}
 .trainee-checks input[type=checkbox]{width:18px!important;height:18px!important;flex:0 0 18px}
+
+/* ---------- Realistic waveguide HUD ----------
+   Real smart-glasses displays are monochrome, thin-lined and steady, with a limited field of view.
+   These rules override the earlier game-like styling (pulsing brackets, scanlines, chunky chips). */
+.glasses-frame{--hud:#8dffc0;--hud-dim:#8dffc066;border-radius:14px;box-shadow:0 1px 2px #0002,0 18px 40px #362d2633}
+.feed-grade{background:radial-gradient(ellipse 85% 80% at center,transparent 62%,#00000059 100%)}
+.feed-grade::after{background:linear-gradient(180deg,#00000040 0%,transparent 16%,transparent 80%,#00000059 100%)}
+.feed-photo.is-rising{animation:feed-in .45s ease-out}
+.hud-top{top:12px;left:16px;right:16px;font:600 11px/1 Inter,'Apple SD Gothic Neo',Arial,sans-serif;letter-spacing:.06em;color:var(--hud);text-shadow:0 0 6px #000c}
+.hud-rec{width:6px;height:6px;background:var(--hud);animation:none;box-shadow:0 0 6px var(--hud)}
+.hud-step{padding:3px 7px;border:1px solid var(--hud-dim);background:transparent;border-radius:4px}
+.hud-status{top:38px;padding:5px 10px;border-radius:6px;font:500 12.5px/1.25 Inter,'Apple SD Gothic Neo',Arial,sans-serif;color:#fff;background:#06100bb3;border:1px solid var(--hud-dim);backdrop-filter:none;text-shadow:none}
+.hud-status svg{color:var(--hud)}
+.hud-status.is-good{border-color:var(--hud);color:var(--hud)}
+.hud-status.is-bad{border-color:#ff8a7a;color:#ffb3a8;animation:none}
+.hud-status.is-bad svg{color:#ff8a7a}
+
+.ar-box{border:1px solid #ffffff59;border-radius:3px;box-shadow:none;animation:none;filter:none}
+.ar-box>span{top:-3px;transform:translateY(-100%);left:-1px;padding:0 0 2px;background:none!important;color:#ffffffd9!important;font:600 11px/1.2 Inter,'Apple SD Gothic Neo',Arial,sans-serif;letter-spacing:.02em;border-radius:0;text-shadow:0 0 4px #000,0 0 8px #000a}
+.ar-box.is-target{border:1.5px solid var(--hud);background:#8dffc00d;box-shadow:0 0 10px #8dffc040,inset 0 0 10px #8dffc01f;animation:none}
+.ar-box.is-target>span{color:var(--hud)!important}
+.ar-box.is-ok{border:1px solid var(--hud-dim)}
+.ar-box.is-ok>span{color:var(--hud)!important;font-size:10px}
+.ar-box.is-good{border-color:var(--hud);filter:none}
+.ar-box.is-bad{border-color:#ff8a7a;box-shadow:0 0 10px #ff8a7a40;filter:none}
+.ar-box.is-bad>span{color:#ffb3a8!important}
+.ar-pour{width:0;margin-left:0;border-left:1.5px dashed var(--hud);background:none;animation:none;filter:drop-shadow(0 0 4px var(--hud))}
+
+.ar-card{background:#06100bb3;border:1px solid var(--hud-dim);border-radius:8px;backdrop-filter:none;font-family:Inter,'Apple SD Gothic Neo',Arial,sans-serif;animation:none}
+.ar-card small{font-size:9.5px;font-weight:600;letter-spacing:.1em;color:var(--hud)}
+.ar-scale{bottom:22px;right:16px;padding:9px 13px 9px 9px}
+.ar-scale svg text{font:600 14px/1 Inter,Arial,sans-serif;fill:#fff}
+.ar-scale b{font-weight:600;font-variant-numeric:tabular-nums}
+.ar-scale b.good{color:var(--hud)}
+.ar-locate{left:auto;right:16px;top:auto;bottom:22px;padding:10px 14px;animation:none;border-color:var(--hud)}
+.ar-locate b{font-size:16px;font-weight:600}
+.ar-timer{bottom:22px;right:16px}
+.ar-timer b{font-weight:600;font-variant-numeric:tabular-nums}
+.ar-pieces{bottom:22px;left:16px}
+.ar-pieces span{font-family:Inter,Arial,sans-serif;font-variant-numeric:tabular-nums}
+.ar-pieces span.is-on{background:#8dffc026;color:var(--hud)}
+.hud-caption{background:#14110f;font-size:.9rem}
+.hud-caption svg{color:#8dffc0}

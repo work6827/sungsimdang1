@@ -48,19 +48,23 @@ const recipes:Recipe[]=[
 /* ---------- Camera-feed photography (see public/assets/photos/credits.md) ---------- */
 type Box={x:number;y:number;w:number;h:number};
 const PHOTO={
- ingredients:{src:'training/ingredients.webp',credit:'pfctdayelise · CC BY-SA 2.5'},
+ kitchen:{src:'training/kitchen-mixer.webp',credit:'Infrogmation of New Orleans · CC BY-SA 3.0'},
  bowls:{src:'training/prep-bowls.webp',credit:'Cynthinee · CC BY 4.0'},
- mixer:{src:'training/mixer.webp',credit:'Your Best Digs · CC BY 2.0'},
+ mixer:{src:'training/kitchen-mixer.webp',credit:'Infrogmation of New Orleans · CC BY-SA 3.0'},
  knead:{src:'training/kneading.webp',credit:'Shixart1985 · CC BY 2.0'},
  proof:{src:'training/proofing.webp',credit:'Ruth Hartnup · CC BY 2.0'},
- divide:{src:'baker-workstation.webp',credit:'Pexels'},
+ divide:{src:'training/divider.webp',credit:'Martin Carpenter · CC BY 3.0'},
  fry:{src:'training/frying.webp',credit:'Waldo Jaquith · CC BY-SA 2.0'},
  bake:{src:'bread-rolls.webp',credit:'kall · Pexels'},
 };
-/* Where each ingredient sits in the ingredients photo, in % of the frame (4:3). */
-const detected:Partial<Record<Station,Box>>={
- flour:{x:1,y:17,w:35,h:75},milk:{x:36,y:2,w:27,h:80},sugar:{x:63,y:16,w:34,h:57},butter:{x:55,y:66,w:17,h:26},eggs:{x:21,y:80,w:38,h:19},
+/* Storage zones visible in the kitchen photo, in % of the 4:3 frame. Each ingredient maps to the zone it is stored in. */
+type Zone='bin'|'dry'|'cold';
+const zones:Record<Zone,{box:Box;name:Tx}>={
+ bin:{box:{x:0.5,y:34,w:9.5,h:22},name:['Flour bin','밀가루 통']},
+ dry:{box:{x:10.5,y:28,w:7.5,h:22},name:['Dry goods','건조 식재료']},
+ cold:{box:{x:88.5,y:13,w:11,h:22},name:['Fridge','냉장고']},
 };
+const zoneOf:Record<Station,Zone>={flour:'bin',sugar:'dry',salt:'dry',yeast:'dry',milk:'cold',water:'cold',eggs:'cold',butter:'cold'};
 const labelOf:Record<Station,Tx>={flour:['Flour','밀가루'],sugar:['Sugar','설탕'],salt:['Salt','소금'],yeast:['Yeast','이스트'],milk:['Milk','우유'],water:['Water','물'],eggs:['Eggs','달걀'],butter:['Butter','버터']};
 const locationOf:Record<Station,Tx>={flour:['Dry store · Bin B2','건조 창고 · B2'],sugar:['Dry store · Bin B4','건조 창고 · B4'],salt:['Spice rack · Shelf 1','양념 선반 · 1단'],yeast:['Walk-in fridge · Shelf 3','워크인 냉장고 · 3단'],milk:['Walk-in fridge · Shelf 1','워크인 냉장고 · 1단'],water:['Chilled tap · Station 2','냉수 탭 · 2번 스테이션'],eggs:['Walk-in fridge · Shelf 2','워크인 냉장고 · 2단'],butter:['Walk-in fridge · Shelf 2','워크인 냉장고 · 2단']};
 /* The prep bowl on the scale in the bowls photo. */
@@ -130,8 +134,8 @@ export function Trainee(){
  const pct=(b:Box)=>({left:`${b.x}%`,top:`${b.y}%`,width:`${b.w}%`,height:`${b.h}%`});
 
  /* Which camera frame to show: locate the ingredient first, then switch to the bowl once pouring starts. */
- const locating=step.type==='weigh'&&current===0&&!pouring&&!!detected[step.ing.station];
- const photo=step.type==='weigh'?(locating?PHOTO.ingredients:PHOTO.bowls):({mix:PHOTO.mixer,knead:PHOTO.knead,proof:PHOTO.proof,divide:PHOTO.divide,finish:recipe.id==='soboro'?PHOTO.fry:PHOTO.bake})[step.proc.kind];
+ const locating=step.type==='weigh'&&current===0&&!pouring;
+ const photo=step.type==='weigh'?(locating?PHOTO.kitchen:PHOTO.bowls):({mix:PHOTO.mixer,knead:PHOTO.knead,proof:PHOTO.proof,divide:PHOTO.divide,finish:recipe.id==='soboro'?PHOTO.fry:PHOTO.bake})[step.proc.kind];
  const ingName=step.type==='weigh'?L(step.ing.name):'';
 
  const hudStatus=step.type==='weigh'
@@ -156,28 +160,30 @@ export function Trainee(){
       <div className="feed-grade" aria-hidden="true"/>
 
       {/* Object detection while locating the ingredient */}
-      {locating&&step.type==='weigh'&&(Object.keys(detected) as Station[]).map(k=>{const b=detected[k]!;const on=k===step.ing.station;return <div key={k} className={`ar-box ${on?'is-target':''} ${b.y<8?'label-in':''}`} style={pct(b)}><span>{on?`${t('TAKE','가져오기')} · ${L(labelOf[k])} · 98%`:`${L(labelOf[k])} ${(88+((k.length*7)%9))}%`}</span></div>})}
+      {locating&&step.type==='weigh'&&(Object.keys(zones) as Zone[]).map(z=>{const on=zoneOf[step.ing.station]===z;return <div key={z} className={`ar-box ${on?'is-target':''}`} style={pct(zones[z].box)}><span>{on?`${t('TAKE','가져오기')} · ${ingName}`:L(zones[z].name)}</span></div>})}
+      {locating&&step.type==='weigh'&&<div className="ar-card ar-locate"><small>{t('NEXT INGREDIENT','다음 재료')}</small><b>{ingName}</b><span>{L(locationOf[step.ing.station])}</span></div>}
 
       {/* Bowl lock + live scale while pouring */}
       {step.type==='weigh'&&!locating&&<>
        <div className={`ar-box is-target is-bowl ${inRange?'is-good':over?'is-bad':''}`} style={pct(BOWL)}><span>{t('PREP BOWL · SCALE LINKED','준비 볼 · 저울 연결됨')}</span></div>
        {pouring&&<div className="ar-pour" style={{left:`${BOWL.x+BOWL.w/2}%`,top:'0%',height:`${BOWL.y+BOWL.h*.45}%`}} aria-hidden="true"/>}
-       {!detected[step.ing.station]&&current===0&&<div className="ar-card ar-locate"><small>{t('LOCATE','위치')}</small><b>{ingName}</b><span>{L(locationOf[step.ing.station])}</span></div>}
+       
       </>}
 
-      {step.type==='weigh'&&<div className="ar-card ar-scale">
-       <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32" fill="none" stroke="#ffffff26" strokeWidth="7"/><circle cx="40" cy="40" r="32" fill="none" stroke={over?'#ff7a6b':inRange?'#7ee2a8':'#ffd27a'} strokeWidth="7" strokeLinecap="round" strokeDasharray={`${Math.min(1,current/target)*201} 201`} transform="rotate(-90 40 40)"/><text x="40" y="45" textAnchor="middle">{Math.round(Math.min(999,current/target*100))}%</text></svg>
+      {step.type==='weigh'&&!locating&&<div className="ar-card ar-scale">
+       <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32" fill="none" stroke="#ffffff26" strokeWidth="7"/><circle cx="40" cy="40" r="32" fill="none" stroke={over?'#ff8a7a':'#8dffc0'} strokeWidth="7" strokeLinecap="round" strokeDasharray={`${Math.min(1,current/target)*201} 201`} transform="rotate(-90 40 40)"/><text x="40" y="45" textAnchor="middle">{Math.round(Math.min(999,current/target*100))}%</text></svg>
        <div><small>{t('SCALE','저울')}</small><b className={over?'bad':inRange?'good':''}>{Math.round(current)} g</b><small>{t('TARGET','목표')} {target} g · ±3%</small><small>{t('BAKER’S %','베이커스 %')} {(step.ing.grams/flour*100).toFixed(1)}%</small></div>
       </div>}
 
       {step.type==='process'&&<div className="ar-card ar-timer">
        <small>{L(step.proc.title).toUpperCase()}</small>
        <b>{mmss(Math.max(0,procMinutes*60-(elapsed[index]??0)))}</b>
-       <span className="ar-bar"><span style={{width:`${progress*100}%`,background:procDone?'#7ee2a8':'#ffd27a'}}/></span>
+       <span className="ar-bar"><span style={{width:`${progress*100}%`,background:'#8dffc0',opacity:procDone?1:.75}}/></span>
        <small>{step.proc.kind==='divide'?`${pieces} × ${pieceWeight} g`:step.proc.temp?L(step.proc.temp):t('Demo runs at 60× speed','데모는 60배속으로 진행')}</small>
       </div>}
       {step.type==='process'&&step.proc.kind==='divide'&&<div className="ar-card ar-pieces">{Array.from({length:Math.min(pieces,12)},(_,i)=>{const show=progress*Math.min(pieces,12)>i;const w=pieceWeight+((i*7)%5)-2;return <span key={i} className={show?'is-on':''}>{show?`${w} g`:'—'}</span>})}</div>}
-      {step.type==='process'&&(step.proc.kind==='mix'||step.proc.kind==='knead')&&<div className="ar-box is-target is-soft" style={pct(step.proc.kind==='mix'?{x:22,y:24,w:52,h:50}:{x:40,y:52,w:30,h:30})}><span>{t('DOUGH · TRACKING','반죽 · 추적 중')}</span></div>}
+      {step.type==='process'&&(step.proc.kind==='mix'||step.proc.kind==='knead')&&<div className="ar-box is-target is-soft" style={pct(step.proc.kind==='mix'?{x:18,y:36,w:17,h:20}:{x:40,y:52,w:30,h:30})}><span>{step.proc.kind==='mix'?t('Mixer · speed 1','믹서 · 1단'):t('Dough','반죽')}</span></div>}
+      {step.type==='process'&&step.proc.kind==='divide'&&<><div className="ar-box is-target" style={pct({x:52,y:62,w:28,h:23})}><span>{t('Scale','저울')} · {pieceWeight} g</span></div></>}
 
       <div className="hud-top"><span className="hud-rec"/>{t('TRAINEE VIEW · STATION 2','수습 화면 · 2번 스테이션')}<span className="hud-step">{t('STEP','단계')} {index+1}/{steps.length}</span></div>
       <div className={`hud-status is-${hudStatus.tone}`}>{hudStatus.tone==='good'?<Check size={15}/>:hudStatus.tone==='bad'?<Info size={15}/>:<Sparkles size={15}/>}{hudStatus.text}</div>
