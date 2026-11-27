@@ -11,7 +11,7 @@ export function forecast(p:Product,store:number,at:number,scenario:Scenario,stat
  const fallbackAt=Date.parse('2026-11-20T10:00:00+09:00');const r=state?.inventory[stockKey(p.id,store)]??{count:p.stock[store],at:fallbackAt};
  const reserved=state?allocated(state,p.id,store):0,start=r.at,free=Math.max(0,r.count-reserved),used=demandBetween(p,store,start,Math.max(start,at),scenario),remaining=Math.max(0,free-used);
  const demand=demandBetween(p,store,at,at+2*3600000,scenario);const odds=remaining<1?0:Math.min(98,Math.round(remaining/Math.max(1,demand*1.4)*95));
- let soldOut:number|null=null;if(free<1)soldOut=start;else{let left=free;for(let t=start;t<start+3*86400000;t+=MINUTE){left-=velocity(p,store,t,scenario)/60;if(left<1){soldOut=t+MINUTE;break;}}}
+ let soldOut:number|null=null;if(free<1)soldOut=start;else{let left=free;for(let t=start;t<start+3*86400000;t+=MINUTE){left-=velocity(p,store,t,scenario)/60;if(left<=0){soldOut=t+MINUTE;break;}}}
  const replenishment=Math.max(0,Math.ceil(demand+Math.max(2,p.demand*.3)-remaining));
  return {odds,remaining:Math.floor(remaining),confirmed:r.count,allocated:reserved,demand:Math.ceil(demand),replenishment,soldOut,historical:at<r.at,level:odds>=70?'High':odds>=40?'Moderate':'Low',range:[Math.max(0,odds-12),Math.min(100,odds+12)],reason:scenario==='holiday'?'Holiday scenario: sample sales velocity is 40% higher.':scenario==='rain'?'Rain scenario: sample foot traffic is 20% lower, an unvalidated assumption.':scenario==='ktx'?'KTX-arrival scenario: sample demand is 25% higher; no live train data.':'Based on confirmed sample stock and hourly demand. Afternoon demand is 35% higher.'};
 }

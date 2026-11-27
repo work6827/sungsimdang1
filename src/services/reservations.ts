@@ -1,12 +1,13 @@
 import {products,visitors} from '../data/catalog';
 import {Scenario,allocated,grossStock} from './forecast';
 import {Inventory,seedInventory,stockKey} from './inventory';
+import {KitchenTask,productionPlan} from './kitchen';
 export type Pass={id:string;token:string;profile:string;product:string;store:number;start:number;end:number;status:'active'|'picked-up'|'expired'|'canceled'|'transferred';transfers:number;parent?:string};
 export type Wait={id:string;profile:string;product:string;store:number;start:number;status:'waiting'|'assigned'|'canceled'};
 export type Stamp={id:string;pass:string;profile:string;store:number;at:number};
-export type State={version:3;inventory:Inventory;inventoryUpdates:{product:string;store:number;visible:number;backroom:number;at:number}[];acknowledgments:string[];now:number;profile:string;scenario:Scenario;sequence:number;passes:Pass[];waitlist:Wait[];stamps:Stamp[];donations:{pass:string;amount:number;at:number}[];events:string[]};
-export const initialState=():State=>({version:3,inventory:seedInventory(Date.parse('2026-11-20T10:00:00+09:00')),inventoryUpdates:[],acknowledgments:[],now:Date.parse('2026-11-20T10:00:00+09:00'),profile:'alex',scenario:'normal',sequence:1000,passes:[],waitlist:[],stamps:[],donations:[],events:[]});
-export type Action={type:'reserve'|'join';product:string;store:number;start:number}|{type:'cancel'|'expire';id:string}|{type:'transfer';id:string;recipient:string}|{type:'pickup';id:string;token:string;code:string}|{type:'advance';minutes:number}|{type:'profile';id:string}|{type:'scenario';scenario:Scenario}|{type:'leave';id:string}|{type:'reset'}|{type:'inventory';product:string;store:number;visible:number;backroom:number}|{type:'acknowledge';key:string};
+export type State={version:3;tasks:KitchenTask[];tenantStock:Record<string,number>;inventory:Inventory;inventoryUpdates:{product:string;store:number;visible:number;backroom:number;at:number}[];acknowledgments:string[];now:number;profile:string;scenario:Scenario;sequence:number;passes:Pass[];waitlist:Wait[];stamps:Stamp[];donations:{pass:string;amount:number;at:number}[];events:string[]};
+export const initialState=():State=>({version:3,tasks:[],tenantStock:{'wanchai:tart':36,'soho:tart':24,'wanchai:croissant':28,'soho:croissant':18},inventory:seedInventory(Date.parse('2026-11-20T10:00:00+09:00')),inventoryUpdates:[],acknowledgments:[],now:Date.parse('2026-11-20T10:00:00+09:00'),profile:'alex',scenario:'normal',sequence:1000,passes:[],waitlist:[],stamps:[],donations:[],events:[]});
+export type Action={type:'reserve'|'join';product:string;store:number;start:number}|{type:'cancel'|'expire';id:string}|{type:'transfer';id:string;recipient:string}|{type:'pickup';id:string;token:string;code:string}|{type:'advance';minutes:number}|{type:'profile';id:string}|{type:'scenario';scenario:Scenario}|{type:'leave';id:string}|{type:'reset'}|{type:'inventory';product:string;store:number;visible:number;backroom:number}|{type:'acknowledge';key:string}|{type:'recommend';product:string;store:number}|{type:'task';id:string;status:KitchenTask['status']}|{type:'surge'}|{type:'tenant-stock';key:string;count:number};
 const duplicate=(s:State,profile:string,product:string)=>s.passes.some(p=>p.profile===profile&&p.product===product&&p.status==='active');
 const occupied=(s:State,product:string,store:number,start:number)=>s.passes.some(p=>p.product===product&&p.store===store&&['active','picked-up'].includes(p.status)&&p.start<start+1800000&&p.end>start);
 function issue(s:State,profile:string,product:string,store:number,start:number,transfers=0,parent?:string){const id=`SD-${++s.sequence}`;const p:Pass={id,token:`DEMO:${id}:${profile}`,profile,product,store,start,end:start+1800000,status:'active',transfers,parent};s.passes.push(p);return p;}
@@ -16,6 +17,38 @@ export function transition(state:State,a:Action):{state:State;message:string}{
  if(a.type==='reset')return {state:initialState(),message:'Demo reset. All sample activity cleared.'};
  const s:State=structuredClone(state);sweep(s);
  const fail=(message:string)=>({state:s,message});let message='Updated.';
+ if(a.type==='surge'){
+  const fresh=initialState();fresh.now=Date.parse('2026-11-21T10:20:00+09:00');fresh.scenario='holiday';fresh.inventory=seedInventory(fresh.now);
+  // Seven units at 10.976 units/hour gives approximately 39 minutes to depletion.
+  fresh.inventory[stockKey('soboro',0)]={count:7,visible:7,backroom:0,at:fresh.now};
+  return {state:fresh,message:'Saturday Demand Surge loaded at 10:20 KST. Review the Soboro shelf, then approve production.'};
+ }
+ if(a.type==='tenant-stock'){
+  if(!(a.key in s.tenantStock)||!Number.isInteger(a.count)||a.count<0||a.count>500)return fail('Enter a valid tenant count from 0 to 500.');
+  s.tenantStock[a.key]=a.count;message='Hypothetical Hong Kong tenant updated independently.';
+ }
+ if(a.type==='recommend'){
+  if(!products.some(p=>p.id===a.product)||![0,1,2].includes(a.store))return fail('Choose a valid production product and store.');
+  const plan=productionPlan(s,a.product,a.store);if(!plan.quantity)return fail(plan.reason+' No additional feasible batch.');
+  s.tasks.push({id:`KT-${++s.sequence}`,product:a.product,store:a.store,...plan,status:'Recommended'});message='Production recommendation saved. Staff approval is required.';
+ }
+ if(a.type==='task'){
+  const t=s.tasks.find(t=>t.id===a.id);if(!t)return fail('Unknown kitchen task.');
+  const next={'Recommended':'Approved','Approved':'In Production','In Production':'Completed','Completed':'Received by Store'};
+  if(next[t.status as keyof typeof next]!==a.status)return fail('Follow the production workflow in order.');
+  if(a.status==='Approved'||a.status==='In Production'){
+   const occupied=s.tasks.filter(x=>x.id!==t.id&&x.station===t.station&&['Approved','In Production'].includes(x.status)).reduce((n,x)=>n+x.quantity,0);
+   const target=s.now+t.leadMinutes*60000,hour=new Date(target+9*3600000).getUTCHours();
+   if(occupied+t.quantity>48||hour>=20||hour<9)return fail('Insufficient station capacity or time before closing.');
+   t.target=target;
+  }
+  if(a.status==='Completed'&&s.now<t.target)return fail('Production lead time has not elapsed. Advance the demo clock to the target time.');
+  if(a.status==='Received by Store'){
+   const key=stockKey(t.product,t.store),r=s.inventory[key];
+   s.inventory[key]={...r,count:grossStock(s,products.find(p=>p.id===t.product)!,t.store)+t.quantity,backroom:r.backroom+t.quantity,at:s.now};
+  }
+  t.status=a.status;message=`${t.id}: ${a.status}. ${a.status==='Received by Store'?'Sellable stock and forecasts updated.':'Sellable stock unchanged.'}`;
+ }
  if(a.type==='profile'){if(!visitors.some(v=>v.id===a.id))return fail('Unknown profile.');s.profile=a.id;}
  if(a.type==='scenario')s.scenario=a.scenario;
  if(a.type==='inventory'){

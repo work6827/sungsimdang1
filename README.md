@@ -27,6 +27,7 @@ Browser checks (with the development server running):
 npx playwright install chromium
 node tests/browser.mjs
 node tests/lifecycle-browser.mjs
+node tests/redesign-browser.mjs
 ```
 
 An existing compatible Chromium can be used with `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/absolute/path/to/chromium`. Browser tests reset their own browser-local sample data. No paid API, database or real login is needed.
@@ -41,7 +42,8 @@ An existing compatible Chromium can be used with `PLAYWRIGHT_CHROMIUM_EXECUTABLE
 - `/#/explore` Explore Daejeon
 - `/#/how` How It Works
 - `/#/operations` Operations Center: glasses, demand and kitchen
-- `/#/dashboard` Business Dashboard
+- `/#/dashboard` Operations Analytics
+- `/#/business` SaaS overview, isolated tenant demonstration and business model
 
 Hash routing supports static hosting. Demo Mode is in the header; staff/business links are separate from customer navigation.
 
@@ -49,7 +51,7 @@ Hash routing supports static hosting. Demo Mode is in the header; staff/business
 
 1. **0:00–0:30 — Reset and explain.** Open Demo Mode → Reset. The clock starts at 20 Nov 2026, 10:00 KST. State that all stock, predictions, bookings and rewards are simulations.
 2. **0:30–1:15 — Observe and correct.** Operations Center → Main Store → Strawberry Siru Cake → Simulate shelf scan. Set corrected visible count to `2` and backroom to `0`; confirm. Explain that shelf visibility is not total inventory.
-3. **1:15–1:45 — Review kitchen advice.** Select Kitchen Planning. Show updated free stock, sell-out and replenishment. Acknowledge; no order is placed.
+3. **1:15–1:45 — Review kitchen advice.** Select Demand Forecast to review stock and sell-out. In Kitchen Tasks, create a recommendation, approve it, start production, advance to completion, complete, then confirm store receipt. Completion alone does not change sellable stock.
 4. **1:45–2:15 — Ask before traveling.** Open Bakery Assistant, select Strawberry Siru Cake, Main Store and 10:00. Ask “Is strawberry cake available?” Compare the answer with the operations preview. Switch to Korean or Japanese.
 5. **2:15–3:00 — Reserve and waitlist.** Bread Pass → Strawberry Siru Cake/Main Store/10:00 → Alex → Reserve. Switch visitor to Mina and join the same slot’s waitlist. Switch to Alex and click Demo: expire. Switch to Mina: a new active QR pass appears.
 6. **3:00–3:30 — Controlled transfer.** On Mina’s pass, choose Official transfer → Joon. Confirm. The old pass becomes invalid; a new pass is issued and ₩1,000 is recorded as a simulated donation. No money moves.
@@ -75,7 +77,7 @@ The forecast is deterministic, not trained AI. Percentages are uncalibrated heur
 
 `src/App.tsx` — routed customer and business views.
 
-`public/assets/` — original SVG placeholder illustrations.
+`public/assets/photos/` — locally stored optimized photographs and [usage credits](public/assets/photos/credits.md). Legacy SVGs are retained but no longer rendered.
 
 `tests/browser.mjs` — desktop/mobile demo checks.
 
@@ -87,4 +89,22 @@ Start with [academic-deliverables.md](academic-deliverables.md), which addresses
 
 ## Known limits
 
-The original business-plan DOCX is missing; six-section traceability is provisional. No real interviews or field evaluation have occurred. No actual computer vision or trained forecast accuracy was measured. Placeholder illustrations are not product photos. Product/store combinations and pass eligibility are examples, not a verified current assortment. LocalStorage is editable and not synchronized across devices; this is not a secure production reservation system. Future dates use the latest snapshot and no replenishment schedule; past snapshots are not reconstructed. Prediction history and real-time operations require a backend in production.
+The original business-plan DOCX is missing; six-section traceability is provisional. No real interviews or field evaluation have occurred. No actual computer vision or trained forecast accuracy was measured. Product photography is labeled representative imagery, not actual Sungsimdang products. Product/store combinations and pass eligibility are examples, not a verified current assortment. LocalStorage is editable and not synchronized across devices; this is not a secure production reservation system. Future dates use the latest snapshot and no replenishment schedule; past snapshots are not reconstructed. Prediction history and real-time operations require a backend in production.
+
+
+## Professional redesign
+
+See [redesign-audit.md](redesign-audit.md) for the audit, verification and remaining limitations.
+
+Use the **Experience** selector to switch between Visitor experience, Bakery operations and Business platform. Existing v3 browser data is migrated to add production tasks and isolated Hong Kong sample records without discarding reservations or stamps.
+
+### Saturday Demand Surge
+
+1. Demo Mode → **Load Saturday Demand Surge**. This intentionally loads a fresh scenario at Saturday 21 November, 10:20 KST.
+2. Bakery operations → Main Store → Fried Soboro. Simulate the shelf scan; review 7 visible units and 0 backroom units, then confirm. Expected sell-out is about 10:59, approximately 40 minutes later.
+3. Demand Forecast shows recalculated risk. Kitchen Tasks recommends a feasible batch using two-hour demand, a buffer, reserved stock, pending supply, batch size, lead time, 48-unit station capacity and a 20:00 closing cutoff.
+4. Create recommendation → Approve production → Start production → Demo: advance to completion → Complete production. Stock still does not increase.
+5. Confirm Store Receipt. The common inventory and visitor forecast now include the received batch. Ask the assistant about Soboro at 11:05 to see the same updated stock.
+6. Business platform → Bakehouse. Edit the hypothetical Wanchai egg-tart inventory, switch stores/tenants and refresh. Hong Kong records remain separate from Korean visitor inventory. English and Traditional Chinese labels are available.
+
+The Bakehouse product/store examples are sourced from its [official menu](https://www.bakehouse.hk/menu) and [locations](https://www.bakehouse.hk/locations); all counts and demand assumptions are fictional. Its compact constant-demand estimator is illustrative, not a live forecast or a complete second reservation application. Tenant separation in this frontend prototype is not production security.

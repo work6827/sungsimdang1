@@ -26,3 +26,26 @@ describe('Shared inventory and predictions',()=>{
  it('assistant uses exactly the shared forecast in all languages after an inventory change',()=>{let s=step(initialState(),{type:'inventory',product:'strawberry',store:0,visible:3,backroom:2});const context={product:'strawberry',store:0,at:s.now};const f=forecast(product('strawberry'),0,s.now,s.scenario,s);for(const lang of ['en','ko','ja'] as const){const a=answerQuestion('strawberry availability',lang,s,context);expect(a.forecast).toEqual(f);expect(a.text).toContain(`${f.odds}%`);}const pm=answerQuestion('Will Twigim Soboro be available at 3 PM?','en',s,context);expect(new Date(pm.at+9*3600000).getUTCHours()).toBe(15);});
  it('kitchen acknowledgment is idempotent and does not alter inventory',()=>{let s=initialState(),inventory=s.inventory;s=step(s,{type:'acknowledge',key:'example'});s=step(s,{type:'acknowledge',key:'example'});expect(s.acknowledgments).toEqual(['example']);expect(s.inventory).toEqual(inventory);});
 });
+
+describe('Production and tenant workflows',()=>{
+ it('keeps completion separate from receipt, then updates every shared forecast exactly once',()=>{
+  let s=step(initialState(),{type:'inventory',product:'soboro',store:0,visible:2,backroom:0});
+  s=step(s,{type:'recommend',product:'soboro',store:0});const task=s.tasks[0];expect(task.quantity%task.batchSize).toBe(0);
+  const before=s.inventory['0:soboro'].count;
+  s=step(s,{type:'task',id:task.id,status:'Completed'});expect(s.tasks[0].status).toBe('Recommended');
+  for(const status of ['Approved','In Production'] as const)s=step(s,{type:'task',id:task.id,status});
+  s=step(s,{type:'task',id:task.id,status:'Completed'});expect(s.tasks[0].status).toBe('In Production');
+  s=step(s,{type:'advance',minutes:task.leadMinutes});s=step(s,{type:'task',id:task.id,status:'Completed'});
+  expect(s.inventory['0:soboro'].count).toBe(before);
+  const old=forecast(product('soboro'),0,s.now,s.scenario,s);
+  s=step(s,{type:'task',id:task.id,status:'Received by Store'});expect(s.inventory['0:soboro'].count).toBe(task.quantity);
+  const updated=forecast(product('soboro'),0,s.now,s.scenario,s);expect(updated.remaining).toBeGreaterThan(old.remaining);
+  expect(answerQuestion('soboro availability','en',s,{product:'soboro',store:0,at:s.now}).forecast).toEqual(updated);
+  s=step(s,{type:'task',id:task.id,status:'Received by Store'});expect(s.inventory['0:soboro'].count).toBe(task.quantity);
+ });
+ it('subtracts pending supply and prevents duplicate recommendations',()=>{let s=step(initialState(),{type:'inventory',product:'soboro',store:0,visible:0,backroom:0});s=step(s,{type:'recommend',product:'soboro',store:0});s=step(s,{type:'recommend',product:'soboro',store:0});expect(s.tasks).toHaveLength(1);});
+ it('rejects production that cannot complete before closing',()=>{let s=step(initialState(),{type:'advance',minutes:580});s=step(s,{type:'inventory',product:'soboro',store:0,visible:0,backroom:0});s=step(s,{type:'recommend',product:'soboro',store:0});expect(s.tasks).toHaveLength(0);});
+ it('does not overcommit a station across products and stores',()=>{let s=initialState();for(const id of ['soboro','chive','sweet-potato']){s=step(s,{type:'inventory',product:id,store:0,visible:0,backroom:0});s=step(s,{type:'recommend',product:id,store:0});}for(const t of s.tasks)s=step(s,{type:'task',id:t.id,status:'Approved'});expect(s.tasks.filter(t=>t.status==='Approved').reduce((n,t)=>n+t.quantity,0)).toBeLessThanOrEqual(48);});
+ it('loads a deterministic Saturday scenario with approximately 40 minutes to sell-out',()=>{const s=step(initialState(),{type:'surge'}),f=forecast(product('soboro'),0,s.now,s.scenario,s);expect((f.soldOut!-s.now)/60000).toBeGreaterThanOrEqual(38);expect((f.soldOut!-s.now)/60000).toBeLessThanOrEqual(41);expect(s).toEqual(step(initialState(),{type:'surge'}));});
+ it('isolates tenant stock and rejects invalid counts',()=>{let s=initialState();const original=structuredClone(s.inventory);s=step(s,{type:'tenant-stock',key:'wanchai:tart',count:4});expect(s.tenantStock['wanchai:tart']).toBe(4);expect(s.tenantStock['soho:tart']).toBe(24);expect(s.inventory).toEqual(original);for(const count of [-1,NaN,1.5,501])s=step(s,{type:'tenant-stock',key:'wanchai:tart',count});expect(s.tenantStock['wanchai:tart']).toBe(4);});
+});

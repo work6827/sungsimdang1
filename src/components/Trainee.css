@@ -1,0 +1,105 @@
+.trainee-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:8px 0 18px}
+.trainee-toolbar .chips{display:flex;flex-wrap:wrap;gap:8px}
+.trainee-toolbar .chips button small{margin-left:6px;opacity:.7;font-size:.8em}
+.trainee-toolbar label{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:.85rem;color:var(--muted)}
+.trainee-reset{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;cursor:pointer}
+
+.trainee-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+.trainee-view{min-width:0}
+.glasses-frame{position:relative;border-radius:28px;overflow:hidden;background:#111;box-shadow:0 0 0 6px #2a2522,0 0 0 7px #4a3f37,0 24px 60px #362d2640}
+.glasses-scene{display:block;width:100%;height:auto}
+.tg-label{font:700 11px/1 Inter,Arial,sans-serif;letter-spacing:.12em;fill:#6b5a44}
+.scale-digits{font:700 16px/1 ui-monospace,Menlo,monospace;fill:#7ee2a8}
+.piece-g{font:700 9px/1 ui-monospace,monospace;fill:#7a5a2e}
+
+.hud text{font-family:ui-monospace,Menlo,monospace}
+.hud-panel{fill:#0d1512cc;stroke:#ffd27a66;stroke-width:1.2}
+.hud-chip{fill:#ffd27a}
+.hud-chip-text{font:800 11px/1 ui-monospace,monospace;fill:#2a2018;letter-spacing:.04em}
+.hud-big{font-weight:800;font-size:17px;fill:#fff}
+.hud-timer{font-size:30px;letter-spacing:.04em}
+.hud-mid{font-weight:700;font-size:14px;fill:#fff}
+.hud-small{font-size:9.5px;fill:#ffd27acc;letter-spacing:.08em}
+.hud-target{animation:hud-pulse 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.hud-arrow{animation:hud-dash 1s linear infinite}
+.pour-stream{stroke-dasharray:14 8;animation:hud-dash .4s linear infinite;opacity:.9}
+.pour-wobble{animation:wobble .5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.dough-spin{animation:spin-squash 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.oven-glow{animation:oven 1.6s ease-in-out infinite}
+
+.hud-top{position:absolute;top:14px;left:18px;right:18px;display:flex;align-items:center;gap:8px;font:700 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#ffd27a;text-shadow:0 1px 4px #000a}
+.hud-rec{width:8px;height:8px;border-radius:50%;background:#ff5a4e;animation:hud-blink 1.2s steps(1) infinite}
+.hud-step{margin-left:auto;padding:4px 8px;border:1px solid #ffd27a88;border-radius:6px;background:#0d151299}
+.hud-status{position:absolute;top:44px;left:18px;display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:8px;font:700 12px/1.2 Inter,Arial,sans-serif;color:#fff;background:#0d1512cc;border:1px solid #ffd27a66;backdrop-filter:blur(4px)}
+.hud-status.is-good{border-color:#7ee2a8;color:#bff5d6}
+.hud-status.is-bad{border-color:#ff7a6b;color:#ffd0ca;animation:shake .35s}
+.hud-caption{display:flex;gap:10px;align-items:flex-start;min-height:62px;padding:12px 20px 14px;background:#1b1715;color:#fff;font-size:.92rem;line-height:1.45;animation:caption-in .35s ease-out}
+.hud-caption svg{flex-shrink:0;margin-top:2px;color:#ffd27a}
+
+.trainee-controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.trainee-controls button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:600;cursor:pointer}
+.trainee-controls button:disabled{opacity:.45;cursor:not-allowed}
+.trainee-controls .trainee-pour{background:#493026;color:#fff;border-color:#493026;user-select:none;touch-action:none;transition:transform .1s}
+.trainee-controls .trainee-pour.is-pouring{transform:scale(.97);background:#A87345;border-color:#A87345}
+.trainee-controls .trainee-next{margin-left:auto;background:#42634e;border-color:#42634e;color:#fff}
+.trainee-checks{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-top:14px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fffcf6}
+.trainee-checks>span{display:inline-flex;gap:6px;align-items:center;font-weight:700;width:100%}
+.trainee-checks label{display:inline-flex;gap:8px;align-items:center;font-size:.9rem}
+.trainee-checks small{color:var(--muted)}
+
+.trainee-side{display:grid;gap:16px;position:sticky;top:100px}
+.trainee-card{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fffcf6}
+.trainee-card h2,.trainee-card h3{margin:0;font-size:1.05rem}
+.trainee-card-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.trainee-card-head span{font-size:.8rem;color:var(--muted)}
+.trainee-progress{height:6px;margin:12px 0 10px;border-radius:9px;background:var(--line);overflow:hidden}
+.trainee-progress span{display:block;height:100%;background:#42634e;transition:width .3s}
+.trainee-steps{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.trainee-steps button{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border:0;border-radius:10px;background:none;text-align:left;cursor:pointer;color:var(--ink)}
+.trainee-steps button:hover{background:#f1eadf}
+.trainee-steps button.is-current{background:#f1eadf;font-weight:700}
+.trainee-steps button>span:nth-child(2){flex:1}
+.trainee-steps small{color:var(--muted);font-variant-numeric:tabular-nums}
+.trainee-dot{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid #cbbfae;font-size:.72rem;color:var(--muted)}
+.is-current .trainee-dot{border-color:#A87345;color:#A87345}
+.is-done .trainee-dot{background:#42634e;border-color:#42634e;color:#fff}
+.trainee-note{margin:6px 0 10px;font-size:.82rem;color:var(--muted)}
+.trainee-table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+.trainee-table th{text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 4px;border-bottom:1px solid var(--line)}
+.trainee-table td{padding:7px 4px;border-bottom:1px solid var(--line)}
+.trainee-table td:nth-child(2),.trainee-table th:nth-child(2){text-align:right}
+.trainee-table td:last-child{position:relative;text-align:right;width:84px}
+.trainee-bar{position:absolute;left:4px;top:50%;height:4px;width:calc(var(--w) * .4);max-width:36px;transform:translateY(-50%);border-radius:4px;background:#c99a6a}
+.trainee-table tfoot td{font-weight:700;border-bottom:0}
+.trainee-disclaimer{display:flex;gap:6px;align-items:flex-start;margin:0;font-size:.78rem;color:var(--muted)}
+.trainee-disclaimer svg{flex-shrink:0;margin-top:2px}
+
+@keyframes hud-pulse{50%{opacity:.55;transform:scale(1.03)}}
+@keyframes hud-dash{to{stroke-dashoffset:-28}}
+@keyframes hud-blink{50%{opacity:0}}
+@keyframes wobble{50%{transform:scale(1.04,.94)}}
+@keyframes spin-squash{50%{transform:scale(1.08,.9) rotate(4deg)}}
+@keyframes oven{50%{opacity:.6}}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes caption-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+@media(max-width:1000px){.trainee-layout{grid-template-columns:1fr}.trainee-side{position:static}}
+@media(max-width:600px){
+ .glasses-frame{border-radius:18px}
+ .hud-top{top:8px;left:10px;right:10px;font-size:9px}
+ .hud-status{top:30px;left:10px;font-size:10.5px;padding:4px 8px}
+ .hud-caption{font-size:.82rem;padding:10px 12px}
+ .trainee-toolbar label{margin-left:0}
+ .trainee-controls .trainee-next{margin-left:0}
+}
+
+/* Override the global button hover / form control styles in styles.css */
+.trainee-controls button:hover:not(:disabled){background:#f1eadf}
+.trainee-controls .trainee-pour:hover:not(:disabled){background:#5b3d30}
+.trainee-controls .trainee-pour.is-pouring:hover{background:#A87345}
+.trainee-controls .trainee-next:hover:not(:disabled){background:#365441}
+.trainee-checks label{font-weight:500;cursor:pointer}
+.trainee-checks input[type=checkbox]{appearance:auto;width:18px;height:18px;min-height:0;margin:0;padding:0;flex-shrink:0;accent-color:#42634e;box-shadow:none}
+.trainee-checks label{flex-wrap:nowrap;font-size:.9rem;color:var(--ink);letter-spacing:0}
+.trainee-checks label{display:inline-flex!important;flex:0 1 auto;width:auto!important}
+.trainee-checks input[type=checkbox]{width:18px!important;height:18px!important;flex:0 0 18px}
